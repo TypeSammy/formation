@@ -1,0 +1,81 @@
+{
+  "workbench.colorTheme": "Dracula",
+  "emmet.includeLanguages": {
+    "typescript": "typescriptreact",
+    "javascript": "javascriptreact"
+  },
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "spellchecker.language": "en_GB-ise",
+  "editor.bracketPairColorization.enabled": true,
+  "workbench.colorCustomizations": {
+    "[Relaxed]": {
+      "diffEditor.removedTextBackground": "#a3050056",
+      "diffEditor.insertedTextBackground": "#6a880036"
+    },
+    "[Night Owl]": {
+      "activityBar.border": "#102a44",
+      "editorGroup.border": "#102a44",
+      "sideBar.foreground": "#8BADC1",
+      "activityBar.background": "#000C1D",
+      "sideBar.border": "#102a44",
+      "sideBar.background": "#001122"
+    }
+  },
+  "emmet.syntaxProfiles": {
+    "jsx": {
+      "attr_quotes": "single"
+    }
+  },
+  "eslint.rules.customizations": [{ "rule": "*", "severity": "warn" }],
+  "window.openFoldersInNewWindow": "on",
+  "files.autoSave": "afterDelay",
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+  "breadcrumbs.enabled": true,
+  "workbench.preferredLightColorTheme": "Dracula",
+  "workbench.preferredDarkColorTheme": "Dracula",
+  "terminal.integrated.env.osx": {
+    "FIG_NEW_SESSION": "1"
+  },
+  "editor.formatOnPaste": true,
+  "editor.minimap.enabled": false,
+  "editor.accessibilitySupport": "off",
+  "editor.fontSize": 12,
+  "prettier.singleQuote": true,
+  "prettier.arrowParens": "avoid",
+  "eslint.alwaysShowStatus": true,
+  "workbench.fontAliasing": "auto",
+  "editor.multiCursorModifier": "alt",
+  "gitlens.codeLens.recentChange.enabled": false,
+  "sync.gist": "f8b68097cda54831c4825edb2851c0d9",
+  "prettier.trailingComma": "es5",
+  "editor.fontLigatures": true,
+  "gitlens.codeLens.authors.enabled": false,
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.formatOnType": true,
+  "terminal.integrated.fontFamily": "MesloLGS NF",
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "window.autoDetectColorScheme": true,
+  "prettier.bracketSpacing": true,
+  "editor.fontFamily": "Dank Mono",
+  "files.simpleDialog.enable": true,
+  "terminal.integrated.fontSize": 13,
+  "workbench.sideBar.location": "left"
+}

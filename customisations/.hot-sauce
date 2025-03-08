@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+
+DIRECTORIES=(
+    $HOME/code/work
+    $HOME/tools
+    $HOME/Desktop/screenshots
+)
+
+step "Making directories…"
+for dir in ${DIRECTORIES[@]}; do
+    mkdir -p $dir
+done
+
+step "Download iTerm2 material color scheme"
+if [[ ! -f $HOME/tools/material-design-colors.itermcolors ]]; then
+    wget -P $HOME/tools https://raw.githubusercontent.com/MartinSeeler/iterm2-material-design/master/material-design-colors.itermcolors
+    print_success "${bold}✓ done!${normal}\n"
+else
+    print_success_muted "Material color scheme already installed. Skipping"
+fi
+
+step "Download iTerm2 monokai pro color scheme"
+if [[ ! -f $HOME/tools/monokai_pro.itermcolors ]]; then
+    wget -P $HOME/tools https://raw.githubusercontent.com/ayatmaulana/iterm2-monokai-pro/master/monokai_pro.itermcolors
+    print_success "${bold}✓ done!${normal}\n"
+else
+    print_success_muted "Monokai Pro color scheme already installed. Skipping"
+fi
+
+step "Set up iTerm2 Profiles"
+sudo mkdir -p $HOME/Library/Application\ Support/iTerm2/DynamicProfiles
+
+if [[ -d $HOME/Library/Application\ Support/iTerm2/DynamicProfiles ]]; then
+    cp -a $cwd/customisations/iterm/. $HOME/Library/Application\ Support/iTerm2/DynamicProfiles
+    print_success "Successfully copied profiles - enable via iTerm preferences"
+else
+    print_success_muted "Path does not exist. Skipped"
+fi
+
+step "Install ZSH Completions"
+zsh_completions_dir=$HOME/.oh-my-zsh/custom/plugins/zsh-completions
+
+if [[ ! -d $zsh_completions_dir ]]; then
+    git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-completions
+    print_success "zsh completions plugin installed"
+else
+    print_success_muted "zsh completions plugin already installed. Skipping"
+fi
+
+step "Copy posh theme prompt"
+poshtheme=$cwd/customisations/posh-theme.json
+if [ -e $poshtheme ]; then
+    cp $poshtheme $HOME/tools
+    print_success "posh theme file successfully copied"
+else print_success_muted "No posh theme file found. Skipping"
+fi
+
+step "Copy mojada prompt"
+mojadaposhtheme=$cwd/customisations/mojada.json
+if [ -e $mojadaposhtheme ]; then
+    cp $mojadaposhtheme $HOME/tools
+    print_success "mojada posh theme file successfully copied"
+else print_success_muted "No mojada posh theme file found. Skipping"
+fi
+
+step "Copy zshrc"
+zshrc=$cwd/customisations/.zshrc
+if [ -e $zshrc ]; then
+    cp $zshrc $HOME
+    print_success ".zshrc file successfully copied"
+else print_success_muted "No .zshrc file found. Skipping"
+fi
+
+step "Copy vscode settings"
+code_settings=$cwd/customisations/code/settings.json
+if [ -e $code_settings ]; then
+    cp $code_settings ~/Library/Application\ Support/Code/User/
+     print_success "vscode settings json successfully copied"
+else print_success_muted "No settings file found. Skipping"
+fi
+
+step "Copy vscode keybindings"
+code_keybindings=$cwd/customisations/code/keybindings.json
+if [ -e $code_keybindings ]; then
+    cp $code_keybindings ~/Library/Application\ Support/Code/User/
+     print_success "vscode keybindings file successfully copied"
+else print_success_muted "No keybindings file found. Skipping"
+fi
+
+step "Copy gitconfig"
+gitconfig=$cwd/customisations/.gitconfig
+if [ -e $gitconfig ]; then
+    cp $gitconfig $HOME
+     print_success ".gitconfig file successfully copied"
+else print_success_muted "No .gitconfig file found. Skipping"
+fi
+
+step "MacOS Configuration"
+if [ -e $cwd/customisations/macos ]; then
+    . "$cwd/customisations/macos"
+     print_success "macOS configuration successful"
+else print_success_muted "No macOS configuration file found. Skipping"
+fi
