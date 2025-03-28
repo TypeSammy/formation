@@ -1,10 +1,8 @@
 # Fig pre block. Keep at the top of this file.
 [[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && . "$HOME/.fig/shell/zshrc.pre.zsh"
 
-eval "$(oh-my-posh init zsh --config $HOME/tools/mojada.json)"
-
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:$(go env GOPATH)/bin:/usr/local/bin:/Users/jessicaryan/Library/Python/3.8/bin:$PATH
+export PATH=$HOME/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/$(whoami)/.oh-my-zsh
@@ -12,7 +10,7 @@ export ZSH=/Users/$(whoami)/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME=""
+ZSH_THEME="kolo"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -113,7 +111,7 @@ load-nvmrc() {
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=blue,underline
 # ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue,underline
