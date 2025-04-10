@@ -15,7 +15,7 @@ mkdir -p /Users/$(whoami)/code/personal/dotfiles
 
 cd /Users/$(whoami)/code/personal/dotfiles
 
-curl -L https://github.com/jessicakryan/formation/tarball/jess-updates | tar -xzv --strip-components 1 &> /dev/null;
+curl -L https://github.com/jessicakryan/formation/tarball/sam-updates | tar -xzv --strip-components 1 &> /dev/null;
 
 ```
 
