@@ -1,49 +1,53 @@
-# 🐝 Formation <a href="https://www.patreon.com/minamarkham"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="100"></a>
+# 🐝 Formation
 
 ![Let's get in formation](assets/formation.gif)
 
-> Formation is a shell script to set up a macOS laptop for design and development.
+> Shell scripts that set up a Mac for development: apps, CLI tools, dotfiles, Claude Code preferences and macOS settings.
 
-It can be run multiple times on the same machine safely. It installs, upgrades, or skips packages based on what is already installed on the machine.
+Safe to run more than once. Anything already installed is skipped, and existing dotfiles are only replaced if you say yes.
+
+## Before you start
+
+-   Sign in to the App Store, so App Store apps can install.
+-   Have your Mac password ready. The script asks for it once.
+-   It asks a few questions along the way:
+    -   Create an SSH key (if you don't have one) and add it to GitHub
+    -   Install Cursor and Xcode (both default to no)
+    -   Run the customisations ("hot sauce")
+    -   Replace any existing dotfiles or editor settings that differ from formation's (default no; old ones are kept as `.bak`)
 
 ## Install
 
-Download the script:
+1.  Install Apple's command line tools, which include git:
 
-```sh
-mkdir -p /Users/$(whoami)/code/personal/dotfiles
+    ```sh
+    xcode-select --install
+    ```
 
-cd /Users/$(whoami)/code/personal/dotfiles
+2.  Clone formation. Clone it rather than downloading a zip, because `~/.claude/CLAUDE.md` is linked into this folder and you'll want to commit changes to it:
 
-curl -L https://github.com/TypeSammy/formation/tarball/sam-updates | tar -xzv --strip-components 1 &> /dev/null;
+    ```sh
+    git clone -b sam-updates https://github.com/TypeSammy/formation.git ~/code/personal/formation
+    cd ~/code/personal/formation
+    ```
 
-```
+3.  Read what it does (please don't run scripts you don't understand), then run it:
 
-Review the script (please don't run scripts you don't understand):
+    ```sh
+    less slay
+    ./slay 2>&1 | tee ~/slay.log
+    ```
 
-```sh
-less slay
-```
+    The output is saved to `~/slay.log`.
 
-Slay:
+## After it finishes
 
-```sh
-./slay 2>&1 | tee ~/slay.log
-```
+1.  Quit and reopen your terminal.
+2.  If the script copied your SSH key, paste it into [GitHub](https://github.com/settings/keys).
+3.  In iTerm2, go to **Settings → Profiles** select **Almost Dracula** and click **Other Actions → Set as Default**.
+4.  Open and sign in to your apps (Claude, Slack, Docker Desktop and so on).
 
-Just follow the prompts and you’ll be fine. 👌
-
-:warning: Warning: I advise against running [this script](slay) unless you understand what it’s doing to your computer.
-
-I created this based on my own preferences; your mileage may vary.
-
-Once the script is done, quit and relaunch Terminal.
-
-It is highly recommended to run the script regularly to keep your computer up to date.
-
-Your last Formation run will be saved to `~/slay.log`. To review it, run `less ~/slay.log`.
-
-That's it! :sparkles:
+To pick up changes later, `git pull` and run `./slay` again.
 
 ## What it sets up
 
@@ -111,13 +115,13 @@ Adjust the files in [`swag`](swag) to change what gets installed.
 
 Write customisations so they can be run safely more than once. Formation functions such as `step`, `ask` and `mkd` (from [`twirl`](twirl)) can be used in it.
 
-## Known Issues
+## Known issues
 
-Cask does not recognize applications installed outside of Homebrew Cask – in the case that the script fails, you can either remove the application from the install list or uninstall the application causing the failure and try again.
+Apps you installed without Homebrew (for example Chrome from google.com) can't be managed by it. The script warns and skips them, and the rest of the setup carries on.
 
 ## Acknowledgements
 
-Inspiration and code was taken from many sources, including:
+Formation was created by [Mina Markham](https://github.com/minamarkham/formation). Inspiration and code were also taken from:
 
 -   [Mathias Bynens'](https://github.com/mathiasbynens) [dotfiles](https://github.com/mathiasbynens/dotfiles)
 -   thoughtbot's [laptop](https://github.com/thoughtbot/laptop/)
