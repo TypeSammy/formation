@@ -6,6 +6,29 @@ DIRECTORIES=(
     $HOME/Desktop/screenshots
 )
 
+# Copy a file from customisations/ into $HOME (optionally to a different path).
+# If a different one is already there, ask before replacing it and keep the
+# old one as <file>.bak
+copy_dotfile() {
+    local src=$cwd/customisations/$1
+    local dest=$HOME/${2:-$1}
+
+    if [ ! -e "$src" ]; then
+        print_success_muted "No $1 file found. Skipping"
+    elif [ ! -e "$dest" ]; then
+        cp "$src" "$dest"
+        print_success "${2:-$1} file successfully copied"
+    elif cmp -s "$src" "$dest"; then
+        print_success_muted "~/${2:-$1} already up to date. Skipping"
+    elif ask "~/${2:-$1} differs from formation's. Replace it? (old one saved as ~/${2:-$1}.bak)" N; then
+        mv "$dest" "$dest.bak"
+        cp "$src" "$dest"
+        print_success "${2:-$1} file replaced (old one saved as ~/${2:-$1}.bak)"
+    else
+        print_success_muted "Kept existing ~/${2:-$1}"
+    fi
+}
+
 step "Making directories…"
 for dir in ${DIRECTORIES[@]}; do
     mkdir -p $dir
@@ -28,7 +51,7 @@ else
 fi
 
 step "Set up iTerm2 Profiles"
-sudo mkdir -p "$HOME/Library/Application Support/iTerm2/DynamicProfiles"
+mkdir -p "$HOME/Library/Application Support/iTerm2/DynamicProfiles"
 
 if [[ -d "$HOME/Library/Application Support/iTerm2/DynamicProfiles" ]]; then
     cp -R -X "$cwd/customisations/iterm/" "$HOME/Library/Application Support/iTerm2/DynamicProfiles/"
@@ -47,52 +70,63 @@ else
     print_success_muted "zsh completions plugin already installed. Skipping"
 fi
 
-step "Copy posh theme prompt"
-poshtheme=$cwd/customisations/posh-theme.json
-if [ -e $poshtheme ]; then
-    cp $poshtheme $HOME/tools
-    print_success "posh theme file successfully copied"
-else print_success_muted "No posh theme file found. Skipping"
-fi
-
-step "Copy mojada prompt"
-mojadaposhtheme=$cwd/customisations/mojada.json
-if [ -e $mojadaposhtheme ]; then
-    cp $mojadaposhtheme $HOME/tools
-    print_success "mojada posh theme file successfully copied"
-else print_success_muted "No mojada posh theme file found. Skipping"
-fi
-
 step "Copy zshrc"
-zshrc=$cwd/customisations/.zshrc
-if [ -e $zshrc ]; then
-    cp $zshrc $HOME
-    print_success ".zshrc file successfully copied"
-else print_success_muted "No .zshrc file found. Skipping"
-fi
+copy_dotfile .zshrc
 
-step "Copy vscode settings"
-code_settings=$cwd/customisations/code/settings.json
-if [ -e $code_settings ]; then
-    cp $code_settings ~/Library/Application\ Support/Code/User/
-     print_success "vscode settings json successfully copied"
-else print_success_muted "No settings file found. Skipping"
-fi
+step "Copy aliases"
+copy_dotfile .aliases
 
-step "Copy vscode keybindings"
-code_keybindings=$cwd/customisations/code/keybindings.json
-if [ -e $code_keybindings ]; then
-    cp $code_keybindings ~/Library/Application\ Support/Code/User/
-     print_success "vscode keybindings file successfully copied"
-else print_success_muted "No keybindings file found. Skipping"
-fi
+step "Copy editor settings"
+# VS Code and Cursor only create their settings folder on first launch,
+# so create it if the app is installed
+for editor in "Visual Studio Code:Code:code" "Cursor:Cursor:cursor"; do
+    app_name=${editor%%:*}
+    rest=${editor#*:}
+    support_dir="$HOME/Library/Application Support/${rest%%:*}/User"
+    src_dir="$cwd/customisations/${rest#*:}"
+
+    if [ ! -d "/Applications/$app_name.app" ]; then
+        print_success_muted "$app_name not installed. Skipping"
+        continue
+    fi
+
+    mkdir -p "$support_dir"
+    for editor_file in settings.json keybindings.json; do
+        if [ ! -e "$src_dir/$editor_file" ]; then
+            print_success_muted "No $app_name $editor_file found. Skipping"
+        elif [ ! -e "$support_dir/$editor_file" ] || cmp -s "$src_dir/$editor_file" "$support_dir/$editor_file"; then
+            cp "$src_dir/$editor_file" "$support_dir/"
+            print_success "$app_name $editor_file copied"
+        elif ask "$app_name $editor_file differs from formation's. Replace it? (old one saved as .bak)" N; then
+            mv "$support_dir/$editor_file" "$support_dir/$editor_file.bak"
+            cp "$src_dir/$editor_file" "$support_dir/"
+            print_success "$app_name $editor_file replaced"
+        else
+            print_success_muted "Kept existing $app_name $editor_file"
+        fi
+    done
+done
 
 step "Copy gitconfig"
-gitconfig=$cwd/customisations/.gitconfig
-if [ -e $gitconfig ]; then
-    cp $gitconfig $HOME
-     print_success ".gitconfig file successfully copied"
-else print_success_muted "No .gitconfig file found. Skipping"
+copy_dotfile .gitconfig
+copy_dotfile .gitignore_global
+
+step "Copy Claude Code settings"
+mkdir -p $HOME/.claude
+copy_dotfile claude/settings.json .claude/settings.json
+copy_dotfile claude/statusline-script.sh .claude/statusline-script.sh
+
+step "Link Claude Code preferences"
+claude_md=$cwd/customisations/claude/CLAUDE.md
+if [ -L $HOME/.claude/CLAUDE.md ]; then
+    print_success_muted "~/.claude/CLAUDE.md already linked. Skipping"
+elif [ -e $claude_md ]; then
+    mkdir -p $HOME/.claude
+    # Keep any existing file rather than overwriting it
+    [ -e $HOME/.claude/CLAUDE.md ] && mv $HOME/.claude/CLAUDE.md $HOME/.claude/CLAUDE.md.bak
+    ln -s $claude_md $HOME/.claude/CLAUDE.md
+    print_success "~/.claude/CLAUDE.md linked (any previous file saved as CLAUDE.md.bak)"
+else print_success_muted "No CLAUDE.md found. Skipping"
 fi
 
 step "MacOS Configuration"

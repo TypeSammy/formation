@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# direnv files often hold secrets
+.envrc
+
+# Vim swap files
+*.swp
