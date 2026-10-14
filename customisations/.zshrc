@@ -1,8 +1,9 @@
-# Fig pre block. Keep at the top of this file.
-[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && . "$HOME/.fig/shell/zshrc.pre.zsh"
-
-# If you come from bash you might have to change your $PATH.
-export PATH=$HOME/usr/local/bin:$PATH
+# Homebrew (Apple Silicon installs to /opt/homebrew, Intel to /usr/local)
+if [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x /usr/local/bin/brew ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
 
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/$(whoami)/.oh-my-zsh
@@ -101,6 +102,7 @@ export NVM_DIR="$HOME/.nvm"
 autoload -U add-zsh-hook
 
 load-nvmrc() {
+  type nvm &>/dev/null || return
   if [[ -f .nvmrc && -r .nvmrc ]]; then
     nvm use
   elif [[ $(nvm version) != $(nvm version default)  ]]; then
@@ -111,7 +113,7 @@ load-nvmrc() {
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 
-# source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+type brew &>/dev/null && [ -f "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 # ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=blue,underline
 # ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue,underline
@@ -119,7 +121,7 @@ load-nvmrc
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+# Load per-directory .envrc files
+type direnv &>/dev/null && eval "$(direnv hook zsh)"
 
-# Fig post block. Keep at the bottom of this file.
-[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && . "$HOME/.fig/shell/zshrc.post.zsh"
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"

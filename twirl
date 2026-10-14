@@ -229,9 +229,9 @@ get_os_version() {
 }
 
 check_internet_connection() {
-    if [ ping -q -w1 -c1 google.com &>/dev/null ]; then
+    if ! ping -q -t 2 -c 1 google.com &>/dev/null; then
         print_error "Please check your internet connection";
-        exit 0
+        exit 1
     else
         print_success "Internet connection";
     fi
@@ -376,20 +376,10 @@ ask() {
 # 
 ###############################################################################
 
-# return 1 if global command line program installed, else 0
-cli_is_installed() {
-    # set to 1 initially
-    local return_=1
-    # set to 0 if not found
-    type $1 >/dev/null 2>&1 || { local return_=0; }
-    # return value
-    echo "$return_"
-}
-
 copy_key_github() {
     inform 'Public key copied! Paste into Github…'
-    [[ -f $pub ]] && cat $pub | pbcopy
-    open 'https://github.com/account/ssh'
+    [[ -f $pub ]] && pbcopy < "$pub"
+    open 'https://github.com/settings/keys'
     read -p "   ✦  Press enter to continue…"
     print_success "SSH key"
     return
@@ -405,14 +395,19 @@ github_key_check() {
 
 create_ssh_key() {
 	if ask "No SSH key found. Create one?" Y; then
-		ssh-keygen -t rsa; github_key_check;
+		ssh-keygen -t ed25519 -f "$HOME/.ssh/id_ed25519"; github_key_check;
 	else
 		return 0;
 	fi
 }
 
 ssh_key_setup() {
-    local pub=$HOME/.ssh/id_rsa.pub
+    local pub=$HOME/.ssh/id_ed25519.pub
+
+    # Fall back to an existing RSA key
+    if ! [[ -f $pub ]] && [[ -f $HOME/.ssh/id_rsa.pub ]]; then
+        pub=$HOME/.ssh/id_rsa.pub
+    fi
 
     if ! [[ -f $pub ]]; then
         create_ssh_key
@@ -421,8 +416,10 @@ ssh_key_setup() {
     fi
 }
 
+# `mas account` no longer works on recent macOS, so just check mas is installed.
+# Installs fail individually if you aren't signed in to the App Store.
 mas_setup() {
-    if mas account > /dev/null; then
+    if command -v mas > /dev/null; then
         return 0
     else
         return 1
@@ -430,11 +427,10 @@ mas_setup() {
 }
 
 install_brews() {
-    if test ! $(brew list --formula | grep $brew); then
+    if ! brew list --formula | grep -q "^$brew\$"; then
         echo_install "Installing $brew"
 		brew install $brew >/dev/null
 		print_in_green "${bold}✓ installed!${normal}\n"
-		print_in_green "To install fonts run `oh-my-posh font install`\n"
 	else
 		print_success_muted "$brew already installed. Skipped."
     fi
@@ -456,32 +452,16 @@ install_application_via_brew() {
 install_application_via_app_store() {
 	if ! mas list | grep $1 &> /dev/null; then
 		echo_install "Installing $2"
-		mas install $1 >/dev/null
-		print_in_green "${bold}✓ installed!${normal}\n"
+		if mas install $1 >/dev/null 2>&1; then
+			print_in_green "${bold}✓ installed!${normal}\n"
+		else
+			print_warning "$2 failed to install. Sign in to the App Store and re-run. Skipping."
+		fi
 	else
 		print_success_muted "$2 already installed. Skipped."
 	fi
 }
 
-install_npm_packages() {
-	if [[ $(cli_is_installed $2) == 0 ]]; then
-		echo_install "Installing $1"
-		npm install $1 -g --silent
-		print_in_green "${bold}✓ installed!${normal}\n"
-	else
-		print_success_muted "$1 already installed. Skipped."
-	fi
-}
-
-install_vscode_extensions() {
-	if [[ ! $(code --list-extensions | grep $extension) ]]; then
-		echo_install "Installing $extension"
-		code --install-extension $extension
-		print_success "${bold}✓ installed!${normal}\n"
-	else
-		print_success_muted "$extension already installed. Skipped."
-	fi
-}
 
 # The releases are returned in the format
 # {"id":3622206,"tag_name":"hello-1.0.0.11",…}
