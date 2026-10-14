@@ -44,7 +44,7 @@ Safe to run more than once. Anything already installed is skipped, and existing 
 
 1.  Quit and reopen your terminal.
 2.  If the script copied your SSH key, paste it into [GitHub](https://github.com/settings/keys).
-3.  In iTerm2, go to **Settings → Profiles** select **Almost Dracula** and click **Other Actions → Set as Default**.
+3.  In iTerm2, go to **Settings → Profiles**, select **Almost Dracula** and click **Other Actions → Set as Default**.
 4.  Open and sign in to your apps (Claude, Slack, Docker Desktop and so on).
 
 To pick up changes later, `git pull` and run `./slay` again.
