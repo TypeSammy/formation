@@ -220,6 +220,38 @@ if ! command -v mas > /dev/null; then
 fi
 
 ###############################################################################
+# INSTALL: Agent Deck (terminal manager for AI coding sessions, needs tmux)
+###############################################################################
+# The installer is pinned to a release tag so the same, checksum-verified
+# installer always runs. `agent-deck update` then brings it to the latest.
+agent_deck_version=v1.16.28
+
+chapter "Installing Agent Deck…"
+if command -v agent-deck > /dev/null || [ -x "$HOME/.local/bin/agent-deck" ]; then
+	print_success_muted "Agent Deck already installed. Skipped."
+elif curl -fsSL "https://raw.githubusercontent.com/asheshgoplani/agent-deck/$agent_deck_version/install.sh" | bash -s -- --version "$agent_deck_version"; then
+	"$HOME/.local/bin/agent-deck" update || print_warning "Agent Deck update failed. Run 'agent-deck update' later."
+	print_success "Agent Deck installed!"
+else
+	print_warning "Agent Deck install failed. Skipping."
+fi
+
+###############################################################################
+# INSTALL: Agent skills (installed into ~/.claude/skills via the skills CLI)
+###############################################################################
+if [ -e $cwd/swag/skills ]; then
+	chapter "Installing agent skills…"
+
+	if ! command -v npx > /dev/null; then
+		print_warning "npx not found (install Node first). Skipping."
+	else
+		for skill in $(<$cwd/swag/skills); do
+			install_skill "${skill%%::*}" "${skill##*::}"
+		done
+	fi
+fi
+
+###############################################################################
 # CLEAN: Homebrew files
 ###############################################################################
 chapter "Cleaning up Homebrew files…"

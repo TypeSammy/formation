@@ -462,6 +462,18 @@ install_application_via_app_store() {
 	fi
 }
 
+install_skill() {
+	if [ -e "$HOME/.claude/skills/$2" ]; then
+		print_success_muted "$2 skill already installed. Skipped."
+	else
+		echo_install "Installing $2 skill"
+		if npx -y skills add "$1" -g -y -s "$2" -a claude-code >/dev/null 2>&1; then
+			print_in_green "${bold}✓ installed!${normal}\n"
+		else
+			print_warning "$2 skill failed to install. Skipping."
+		fi
+	fi
+}
 
 # The releases are returned in the format
 # {"id":3622206,"tag_name":"hello-1.0.0.11",…}

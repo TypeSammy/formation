@@ -71,6 +71,7 @@ To pick up changes later, `git pull` and run `./slay` again.
 -   [fzf](https://github.com/junegunn/fzf) fuzzy finder
 -   [mas](https://github.com/mas-cli/mas) Mac App Store CLI
 -   [wget](https://www.gnu.org/software/wget/)
+-   [tmux](https://github.com/tmux/tmux) terminal multiplexer
 -   [zsh-completions](https://github.com/zsh-users/zsh-completions) and [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
 </details>
 
@@ -79,6 +80,7 @@ To pick up changes later, `git pull` and run `./slay` again.
 
 -   [iTerm2](https://iterm2.com/) terminal
 -   [Claude](https://claude.ai/download) desktop app and [Claude Code](https://claude.com/claude-code)
+-   [Agent Deck](https://github.com/asheshgoplani/agent-deck) for managing AI coding sessions in tmux
 -   [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 -   [Proxyman](https://proxyman.io/) for inspecting HTTP traffic
 -   [Alfred](https://www.alfredapp.com/) launcher
@@ -97,6 +99,7 @@ To pick up changes later, `git pull` and run `./slay` again.
 
 -   `.zshrc`, `.aliases` and `.gitconfig`. If you already have a different one, you'll be asked before it's replaced, and the old one is kept as `.bak`
 -   `claude/CLAUDE.md`, symlinked to `~/.claude/CLAUDE.md` so Claude Code uses the same preferences everywhere. Edits made on the machine land back in this repo
+-   Claude Code skills listed in [`swag/skills`](swag/skills) (Matt Pocock's `teach`, `research`, `wait-what`, `grill-me`, `grill-with-docs` and `handoff`, plus `grilling` and `domain-modeling`, which the grill skills use), installed into `~/.claude/skills` with the [skills](https://github.com/vercel-labs/skills) CLI
 -   `claude/settings.json` (theme and status line) and `claude/statusline-script.sh`, copied into `~/.claude/`. These are copied rather than linked because Claude Code writes to its settings file
 -   Cursor settings and keybindings, if Cursor is installed (you'll be asked whether to install it)
 -   iTerm2 profiles and color schemes

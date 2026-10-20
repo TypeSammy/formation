@@ -9,3 +9,4 @@ gh
 direnv
 shellcheck
 jq
+tmux
