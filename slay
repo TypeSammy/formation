@@ -90,9 +90,15 @@ chapter "Installing Dependencies…"
 # -----------------------------------------------------------------------------
 # NVM
 # -----------------------------------------------------------------------------
-if [ -x nvm ]; then
+export NVM_DIR="$HOME/.nvm"
+
+# nvm doesn't support `set -e`, so pause it for this section
+set +e
+if ! [ -s "$NVM_DIR/nvm.sh" ]; then
 	step "Installing NVM…"
-	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+	# PROFILE=/dev/null stops the installer editing shell config; .zshrc already loads nvm
+	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | PROFILE=/dev/null bash
+	. "$NVM_DIR/nvm.sh"
 	print_success "NVM installed!"
 	step "Installing latest Node…"
 	nvm install node
@@ -103,14 +109,20 @@ if [ -x nvm ]; then
 else
 	print_success_muted "NVM/Node already installed. Skipping."
 fi
+set -e
 
 # -----------------------------------------------------------------------------
 # Homebrew
 # -----------------------------------------------------------------------------
 if ! [ -x "$(command -v brew)" ]; then
 	step "Installing Homebrew…"
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-	export PATH="/usr/local/bin:$PATH"
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	# Apple Silicon installs to /opt/homebrew, Intel to /usr/local
+	if [ -x /opt/homebrew/bin/brew ]; then
+		eval "$(/opt/homebrew/bin/brew shellenv)"
+	else
+		eval "$(/usr/local/bin/brew shellenv)"
+	fi
 	print_success "Homebrew installed!"
 else
 	print_success_muted "Homebrew already installed. Skipping."
@@ -150,13 +162,23 @@ if [ -e $cwd/swag/casks ]; then
 	done
 fi
 
+if [ -d /Applications/Cursor.app ]; then
+	print_success_muted "Cursor already installed. Skipped."
+elif ask "Install Cursor?" N; then
+	cask=cursor
+	install_application_via_brew
+else
+	print_success_muted "Cursor declined. Skipped."
+fi
+
 # -----------------------------------------------------------------------------
 # ZSH
 # -----------------------------------------------------------------------------
 zshdir=$HOME/.oh-my-zsh
 
 if ! [[ -d $zshdir ]]; then
-	sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+	# --unattended stops the installer launching zsh, which would halt this script
+	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
 	print_success "ZSH successfully installed"
 else
 	print_success_muted "ZSH already installed. Skipping"
@@ -166,7 +188,7 @@ fi
 # INSTALL: Mac App Store Apps
 ###############################################################################
 chapter "Installing apps from App Store…"
-if [ -x mas ]; then
+if ! command -v mas > /dev/null; then
 
 	print_warning "Please install mas-cli first: brew mas. Skipping."
 
@@ -186,6 +208,47 @@ if [ -x mas ]; then
 		fi
 	fi
 
+	# Xcode is ~15 GB and only needed for iOS/macOS builds, so ask first
+	if [ -d /Applications/Xcode.app ]; then
+		print_success_muted "Xcode already installed. Skipped."
+	elif ask "Install Xcode? (~15 GB, only needed for iOS/macOS development)" N; then
+		install_application_via_app_store 497799835 Xcode
+	else
+		print_success_muted "Xcode declined. Skipped."
+	fi
+
+fi
+
+###############################################################################
+# INSTALL: Agent Deck (terminal manager for AI coding sessions, needs tmux)
+###############################################################################
+# The installer is pinned to a release tag so the same, checksum-verified
+# installer always runs. `agent-deck update` then brings it to the latest.
+agent_deck_version=v1.16.28
+
+chapter "Installing Agent Deck…"
+if command -v agent-deck > /dev/null || [ -x "$HOME/.local/bin/agent-deck" ]; then
+	print_success_muted "Agent Deck already installed. Skipped."
+elif curl -fsSL "https://raw.githubusercontent.com/asheshgoplani/agent-deck/$agent_deck_version/install.sh" | bash -s -- --version "$agent_deck_version"; then
+	"$HOME/.local/bin/agent-deck" update || print_warning "Agent Deck update failed. Run 'agent-deck update' later."
+	print_success "Agent Deck installed!"
+else
+	print_warning "Agent Deck install failed. Skipping."
+fi
+
+###############################################################################
+# INSTALL: Agent skills (installed into ~/.claude/skills via the skills CLI)
+###############################################################################
+if [ -e $cwd/swag/skills ]; then
+	chapter "Installing agent skills…"
+
+	if ! command -v npx > /dev/null; then
+		print_warning "npx not found (install Node first). Skipping."
+	else
+		for skill in $(<$cwd/swag/skills); do
+			install_skill "${skill%%::*}" "${skill##*::}"
+		done
+	fi
 fi
 
 ###############################################################################
@@ -193,30 +256,6 @@ fi
 ###############################################################################
 chapter "Cleaning up Homebrew files…"
 brew cleanup 2> /dev/null
-
-###############################################################################
-# INSTALL: npm packages
-###############################################################################
-# if [ -e $cwd/swag/npm ]; then
-# 	chapter "Installing npm packages…"
-
-# 	for pkg in $(<$cwd/swag/npm); do
-# 		KEY="${pkg%%::*}"
-# 		VALUE="${pkg##*::}"
-# 		install_npm_packages $KEY $VALUE
-# 	done
-# fi
-
-###############################################################################
-# INSTALL: vscode extensions
-###############################################################################
-if [ -e $cwd/swag/extensions ]; then
-	chapter "Installing vscode extensions"
-
-	for extension in $(<$cwd/swag/extensions); do
-	    install_vscode_extensions $extension
-	done
-fi
 
 ###############################################################################
 # OPTIONAL: Customizations

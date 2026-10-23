@@ -1,0 +1,4 @@
+# Override oh-my-zsh git plugin gc alias
+
+unalias gc 2>/dev/null
+alias gc='git commit'

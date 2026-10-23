@@ -5,3 +5,8 @@ fzf
 zsh-syntax-highlighting
 git-delta
 zsh-completions
+gh
+direnv
+shellcheck
+jq
+tmux

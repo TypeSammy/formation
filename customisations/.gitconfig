@@ -65,13 +65,13 @@
 	#############
 	pl = pull
 	plo = pull origin
-	plom = pull origin master
+	plom = pull origin main
 	#############
 	pb = pull --rebase
 	pbo = pull --rebase origin
 	pbp = pull --rebase upstream
-	pbom = pull --rebase origin master
-	pbpm = pull --rebase upstream master
+	pbom = pull --rebase origin main
+	pbpm = pull --rebase upstream main
 	#############
 	rb = rebase
 	rba = rebase --abort
@@ -111,6 +111,13 @@
 	#############
 [core]
     pager = delta
+    excludesfile = ~/.gitignore_global
+
+[init]
+    defaultBranch = main
+
+[push]
+    autoSetupRemote = true
 
 [delta]
     plus-style = "syntax #012800"
