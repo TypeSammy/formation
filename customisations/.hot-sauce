@@ -129,6 +129,22 @@ elif [ -e $claude_md ]; then
 else print_success_muted "No CLAUDE.md found. Skipping"
 fi
 
+step "Link Claude Code skills"
+# Linked rather than copied, so edits made on the machine land back in this repo
+mkdir -p $HOME/.claude/skills
+for skill_dir in $cwd/customisations/claude/skills/*/; do
+    skill_name=$(basename "$skill_dir")
+    skill_link=$HOME/.claude/skills/$skill_name
+    if [ -L "$skill_link" ]; then
+        print_success_muted "$skill_name skill already linked. Skipping"
+    elif [ -e "$skill_link" ]; then
+        print_warning "~/.claude/skills/$skill_name already exists and isn't a link. Skipping"
+    else
+        ln -s "${skill_dir%/}" "$skill_link"
+        print_success "$skill_name skill linked"
+    fi
+done
+
 step "MacOS Configuration"
 if [ -e $cwd/customisations/macos ]; then
     . "$cwd/customisations/macos"
