@@ -107,6 +107,8 @@ if ! [ -s "$NVM_DIR/nvm.sh" ]; then
 	nodev=$(node -v)
 	print_success "Using Node $nodev!"
 else
+	# Load nvm anyway, so later steps (like agent skills) can find npx
+	. "$NVM_DIR/nvm.sh"
 	print_success_muted "NVM/Node already installed. Skipping."
 fi
 set -e

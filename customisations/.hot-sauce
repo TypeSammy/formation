@@ -111,6 +111,10 @@ step "Copy gitconfig"
 copy_dotfile .gitconfig
 copy_dotfile .gitignore_global
 
+step "Copy SSH config"
+mkdir -p $HOME/.ssh && chmod 700 $HOME/.ssh
+copy_dotfile ssh/config .ssh/config
+
 step "Copy Claude Code settings"
 mkdir -p $HOME/.claude
 copy_dotfile claude/settings.json .claude/settings.json
@@ -127,6 +131,12 @@ elif [ -e $claude_md ]; then
     ln -s $claude_md $HOME/.claude/CLAUDE.md
     print_success "~/.claude/CLAUDE.md linked (any previous file saved as CLAUDE.md.bak)"
 else print_success_muted "No CLAUDE.md found. Skipping"
+fi
+
+# CLAUDE.md imports ~/.claude/work.md for company-specific notes, so make sure it exists
+if [ ! -e $HOME/.claude/work.md ]; then
+    touch $HOME/.claude/work.md
+    print_success "Empty ~/.claude/work.md created for company-specific notes"
 fi
 
 step "Link Claude Code skills"

@@ -106,6 +106,7 @@ To pick up changes later, `git pull` and run `./slay` again.
 -   iTerm2 profiles and color schemes
 -   VS Code settings and keybindings, if VS Code is installed
 -   A global `.gitignore_global` (`.DS_Store`, `.envrc`, swap files)
+-   `~/.ssh/config`, so macOS remembers your SSH key passphrase in Keychain and you only type it once
 -   macOS defaults (`customisations/macos`): Dock, trackpad, key repeat, Finder, screenshots to `~/Desktop/screenshots`
 </details>
 
