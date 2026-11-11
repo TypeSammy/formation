@@ -1,0 +1,5 @@
+# Remember the SSH key passphrase in the macOS Keychain, so it's only typed once
+Host *
+    AddKeysToAgent yes
+    UseKeychain yes
+    IdentityFile ~/.ssh/id_ed25519
