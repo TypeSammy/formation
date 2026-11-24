@@ -1,0 +1,125 @@
+{
+  "Profiles": [
+    {
+      "Ansi 0 Color": {
+        "Blue Component": 0,
+        "Green Component": 0,
+        "Red Component": 0
+      },
+      "Ansi 1 Color": {
+        "Blue Component": 0.3333333432674408,
+        "Green Component": 0.3333333432674408,
+        "Red Component": 1
+      },
+      "Ansi 10 Color": {
+        "Blue Component": 0.4823529411764706,
+        "Green Component": 0.9803921568627451,
+        "Red Component": 0.3137254901960784
+      },
+      "Ansi 11 Color": {
+        "Blue Component": 0.5490196078431373,
+        "Green Component": 0.9803921568627451,
+        "Red Component": 0.9450980392156862
+      },
+      "Ansi 12 Color": {
+        "Blue Component": 0.9764705882352941,
+        "Green Component": 0.5764705882352941,
+        "Red Component": 0.7411764705882353
+      },
+      "Ansi 13 Color": {
+        "Blue Component": 0.7764705882352941,
+        "Green Component": 0.4745098039215686,
+        "Red Component": 1
+      },
+      "Ansi 14 Color": {
+        "Blue Component": 0.9921568627450981,
+        "Green Component": 0.9137254901960784,
+        "Red Component": 0.5450980392156862
+      },
+      "Ansi 15 Color": {
+        "Blue Component": 1,
+        "Green Component": 1,
+        "Red Component": 1
+      },
+      "Ansi 2 Color": {
+        "Blue Component": 0.4823529411764706,
+        "Green Component": 0.9803921568627451,
+        "Red Component": 0.3137254901960784
+      },
+      "Ansi 3 Color": {
+        "Blue Component": 0.5490196078431373,
+        "Green Component": 0.9803921568627451,
+        "Red Component": 0.9450980392156862
+      },
+      "Ansi 4 Color": {
+        "Blue Component": 0.9764705882352941,
+        "Green Component": 0.5764705882352941,
+        "Red Component": 0.7411764705882353
+      },
+      "Ansi 5 Color": {
+        "Blue Component": 0.7764705882352941,
+        "Green Component": 0.4745098039215686,
+        "Red Component": 1
+      },
+      "Ansi 6 Color": {
+        "Blue Component": 0.9921568627450981,
+        "Green Component": 0.9137254901960784,
+        "Red Component": 0.5450980392156862
+      },
+      "Ansi 7 Color": {
+        "Blue Component": 0.7333333492279053,
+        "Green Component": 0.7333333492279053,
+        "Red Component": 0.7333333492279053
+      },
+      "Ansi 8 Color": {
+        "Blue Component": 0.3333333333333333,
+        "Green Component": 0.3333333333333333,
+        "Red Component": 0.3333333333333333
+      },
+      "Ansi 9 Color": {
+        "Blue Component": 0.3333333333333333,
+        "Green Component": 0.3333333333333333,
+        "Red Component": 1
+      },
+      "Background Color": {
+        "Blue Component": 0.15977837145328522,
+        "Green Component": 0.12215272337198257,
+        "Red Component": 0.1176581159234047
+      },
+      "Bold Color": {
+        "Blue Component": 1,
+        "Green Component": 1,
+        "Red Component": 1
+      },
+      "Cursor Color": {
+        "Blue Component": 0.7333333492279053,
+        "Green Component": 0.7333333492279053,
+        "Red Component": 0.7333333492279053
+      },
+      "Cursor Text Color": {
+        "Blue Component": 1,
+        "Green Component": 1,
+        "Red Component": 1
+      },
+      "Foreground Color": {
+        "Blue Component": 0.9003232717514038,
+        "Green Component": 0.9003232717514038,
+        "Red Component": 0.9003232717514038
+      },
+      "Guid": "formation-dracula",
+      "Name": "Dracula",
+      "Selected Text Color": {
+        "Blue Component": 1,
+        "Green Component": 1,
+        "Red Component": 1
+      },
+      "Selection Color": {
+        "Blue Component": 0.3529411852359772,
+        "Green Component": 0.27843138575553894,
+        "Red Component": 0.2666666805744171
+      },
+      "Use Bright Bold": true,
+      "Use Separate Colors for Light and Dark Mode": false
+    }
+  ]
+}
