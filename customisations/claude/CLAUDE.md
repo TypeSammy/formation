@@ -48,6 +48,15 @@ Running things locally is fine: cloning repos, installing dependencies, running 
 
 My working copies may have uncommitted work. Don't modify, reset, or check out branches in them without asking.
 
+## Step-by-step instructions
+
+When I have to do something myself, give each step:
+- **Where:** on its own line: which app, or which terminal and directory (e.g. "new terminal, in `~/src/work/divipay-api`").
+- **What:** on its own line: the exact command or click path. A single command goes inline on the same line, e.g. **What:** `brew install x`. Several commands go in a code block directly under **What:**.
+- **Done when:** what I should see if it worked, and what a failure looks like.
+- Say whether it blocks the terminal (needs its own tab) or returns straight away.
+- Number steps with headings (`### 1. ...`), not a numbered list, and keep code blocks at the left margin, never indented under a list item, so they render as code in the terminal.
+
 ## Secrets
 
 - Never print, echo, log, or commit a secret (tokens, API keys, passwords, private keys), not even partially or "just to check it's set".
