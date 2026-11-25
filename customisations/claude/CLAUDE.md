@@ -56,6 +56,7 @@ When I have to do something myself, give each step:
 - **Done when:** what I should see if it worked, and what a failure looks like.
 - Say whether it blocks the terminal (needs its own tab) or returns straight away.
 - Number steps with headings (`### 1. ...`), not a numbered list, and keep code blocks at the left margin, never indented under a list item, so they render as code in the terminal.
+- Put explanations before a code block, under a **Note:** label. Anything after a code block starts with a bold label (**Done when:**, **Failure:**, **Note:**), so it can't be mistaken for part of the code.
 
 ## Secrets
 
